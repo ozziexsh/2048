@@ -41,6 +41,26 @@ export class Board {
     return this.board;
   }
 
+  public spawnNumber(): Board {
+    const emptySpaces = [];
+    for (let y = 0; y < this.board.length; y++) {
+      for (let x = 0; x < this.board[y].length; x++) {
+        if (this.board[y][x] === Board.EMPTY_SPACE) {
+          emptySpaces.push([y, x]);
+        }
+      }
+    }
+    if (emptySpaces.length === 0) {
+      return this;
+    }
+    const [newY, newX] = emptySpaces[
+      Math.floor(Math.random() * emptySpaces.length)
+    ];
+    const numberToSpawn = Math.random() > 0.75 ? 4 : 2;
+    this.board[newY][newX] = numberToSpawn;
+    return this;
+  }
+
   private shiftLeft(arr: BoardType) {
     const newBoard: BoardType = [];
     for (let y = 0; y < arr.length; y++) {

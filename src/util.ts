@@ -1,3 +1,8 @@
+/**
+ * Rotates a 2d array counter clockwise
+ *
+ * @param arr any 2d array
+ */
 export function rotateLeft<T>(arr: T[][]): T[][] {
   const newArr: T[][] = Array.from({ length: arr.length }).map(() => []);
   const numRows = arr.length;
@@ -11,6 +16,11 @@ export function rotateLeft<T>(arr: T[][]): T[][] {
   return newArr;
 }
 
+/**
+ * Rotates a 2d array clockwise
+ *
+ * @param arr any 2d array
+ */
 export function rotateRight<T>(arr: T[][]): T[][] {
   const newArr: T[][] = Array.from({ length: arr.length }).map(() => []);
   const numRows = arr.length;
