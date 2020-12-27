@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { render, Text, Box, useInput, Static } from 'ink';
+import { Text, Box, useInput, Static } from 'ink';
 import Board from './board';
 import Game from './game';
 
@@ -23,7 +23,7 @@ const COLOR_MAP: {
   4096: 'redBright',
 };
 
-function App() {
+export default function App(): JSX.Element {
   const [map, setMap] = useState(game.board.getBoard());
 
   useInput((input, key) => {
@@ -84,5 +84,3 @@ function App() {
     </Box>
   );
 }
-
-render(<App />);

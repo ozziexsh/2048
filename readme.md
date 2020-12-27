@@ -9,7 +9,7 @@ CLI implementaiton of the game "2048".
 Quickly:
 
 ```
-$ npx 2048
+$ npx 2048-cli
 ```
 
 From source:
@@ -40,6 +40,8 @@ Tech stack is
 - React
 - [ink](https://github.com/vadimdemedes/ink)
 - jest
+- Prettier
+- ESLint
 
 The code is broken out into a few pieces:
 
