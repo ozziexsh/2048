@@ -223,6 +223,77 @@ describe('2048', () => {
     });
   });
 
+  describe('Moving the board down', () => {
+    it('should do nothing with empty rows', () => {
+      const board = new Board(makeEmptyBoard());
+      board.moveDown();
+      expect(board.getBoard()).toEqual(makeEmptyBoard());
+    });
+    it('should move single number rows over to the edge', () => {
+      const board = new Board([
+        [EMPTY, 2, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, 2],
+        [EMPTY, EMPTY, EMPTY, EMPTY],
+      ]);
+      board.moveDown();
+      expect(board.getBoard()).toEqual([
+        [EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, 2, EMPTY, 2],
+      ]);
+    });
+    it('should combine two of the same numbers together alone in a column', () => {
+      const map = [
+        [EMPTY, 2, EMPTY, 4],
+        [EMPTY, 2, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, 4],
+      ];
+      const board = new Board(map);
+      board.moveDown();
+      expect(board.getBoard()).toEqual([
+        [EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, 4, EMPTY, 8],
+      ]);
+    });
+    it('should combine two of the bottommost same numbers together but only two at a time', () => {
+      const map = [
+        [EMPTY, 2, 4, EMPTY],
+        [EMPTY, 2, 4, EMPTY],
+        [EMPTY, EMPTY, 4, EMPTY],
+        [EMPTY, 2, EMPTY, EMPTY],
+      ];
+      const board = new Board(map);
+      board.moveDown();
+      expect(board.getBoard()).toEqual([
+        [EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, 2, 4, EMPTY],
+        [EMPTY, 4, 8, EMPTY],
+      ]);
+    });
+    it('should just shift numbers if no matches', () => {
+      const map = [
+        [EMPTY, 4, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, 2],
+        [EMPTY, 2, EMPTY, EMPTY],
+        [EMPTY, 4, EMPTY, 4],
+      ];
+      const board = new Board(map);
+      board.moveDown();
+      expect(board.getBoard()).toEqual([
+        [EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, 4, EMPTY, EMPTY],
+        [EMPTY, 2, EMPTY, 2],
+        [EMPTY, 4, EMPTY, 4],
+      ]);
+    });
+  });
+
   describe('rotate 2d array left', () => {
     it('Should rotate a 2d array left', () => {
       const board = new Board([

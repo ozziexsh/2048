@@ -113,6 +113,14 @@ export class Board {
     return this;
   }
 
+  public moveDown(): Board {
+    let newBoard = this.rotateLeft(this.board);
+    newBoard = this.shiftRight(newBoard);
+    newBoard = this.rotateRight(newBoard);
+    this.board = newBoard;
+    return this;
+  }
+
   public moveLeft(): Board {
     this.board = this.shiftLeft(this.board);
     return this;
