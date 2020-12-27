@@ -9,7 +9,43 @@ export class Board {
     this.board = initialBoard;
   }
 
-  public moveRight() {
+  public moveLeft(): Board {
+    const newBoard = [];
+    for (let y = 0; y < this.board.length; y++) {
+      const row = this.board[y];
+      const nonEmpty = row.filter(cell => cell !== Board.EMPTY_SPACE);
+      const newRow = [];
+      for (let i = 0; i < nonEmpty.length; i++) {
+        const currentCell = nonEmpty[i];
+        const nextCell = nonEmpty[i + 1];
+        if (!currentCell) {
+          continue;
+        }
+        if (!nextCell) {
+          newRow.push(currentCell);
+          continue;
+        }
+        if (nextCell === currentCell) {
+          newRow.push(nextCell + currentCell);
+          i++; // skip 2 (iterator counts as 1)
+          continue;
+        }
+        newRow.push(currentCell);
+      }
+      if (newRow.length !== row.length) {
+        newRow.push(
+          ...Array.from({ length: row.length - newRow.length }).map(
+            () => Board.EMPTY_SPACE,
+          ),
+        );
+      }
+      newBoard.push(newRow);
+    }
+    this.board = newBoard;
+    return this;
+  }
+
+  public moveRight(): Board {
     const newBoard = [];
     for (let y = 0; y < this.board.length; y++) {
       const row = this.board[y];
@@ -42,9 +78,10 @@ export class Board {
       newBoard.push(newRow);
     }
     this.board = newBoard;
+    return this;
   }
 
-  public getBoard() {
+  public getBoard(): BoardType {
     return this.board;
   }
 }
