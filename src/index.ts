@@ -9,10 +9,36 @@ export class Board {
     this.board = initialBoard;
   }
 
-  public moveLeft(): Board {
-    const newBoard = [];
-    for (let y = 0; y < this.board.length; y++) {
-      const row = this.board[y];
+  public rotateLeft<T>(arr: T[][]): T[][] {
+    const newArr: T[][] = Array.from({ length: arr.length }).map(() => []);
+    const numRows = arr.length;
+    for (let y = 0; y < numRows; y++) {
+      const row = arr[y];
+      const numCols = row.length;
+      for (let x = 0; x < numCols; x++) {
+        newArr[numRows - 1 - x][y] = arr[y][x];
+      }
+    }
+    return newArr;
+  }
+
+  public rotateRight<T>(arr: T[][]): T[][] {
+    const newArr: T[][] = Array.from({ length: arr.length }).map(() => []);
+    const numRows = arr.length;
+    for (let y = 0; y < numRows; y++) {
+      const row = arr[y];
+      const numCols = row.length;
+      for (let x = 0; x < numCols; x++) {
+        newArr[x][numRows - 1 - y] = arr[y][x];
+      }
+    }
+    return newArr;
+  }
+
+  private shiftLeft(arr: BoardType) {
+    const newBoard: BoardType = [];
+    for (let y = 0; y < arr.length; y++) {
+      const row = arr[y];
       const nonEmpty = row.filter(cell => cell !== Board.EMPTY_SPACE);
       const newRow = [];
       for (let i = 0; i < nonEmpty.length; i++) {
@@ -41,14 +67,13 @@ export class Board {
       }
       newBoard.push(newRow);
     }
-    this.board = newBoard;
-    return this;
+    return newBoard;
   }
 
-  public moveRight(): Board {
+  private shiftRight(arr: BoardType) {
     const newBoard = [];
-    for (let y = 0; y < this.board.length; y++) {
-      const row = this.board[y];
+    for (let y = 0; y < arr.length; y++) {
+      const row = arr[y];
       const nonEmpty = row.filter(cell => cell !== Board.EMPTY_SPACE);
       const newRow = [];
       for (let i = nonEmpty.length - 1; i >= 0; i--) {
@@ -77,7 +102,24 @@ export class Board {
       }
       newBoard.push(newRow);
     }
+    return newBoard;
+  }
+
+  public moveUp(): Board {
+    let newBoard = this.rotateLeft(this.board);
+    newBoard = this.shiftLeft(newBoard);
+    newBoard = this.rotateRight(newBoard);
     this.board = newBoard;
+    return this;
+  }
+
+  public moveLeft(): Board {
+    this.board = this.shiftLeft(this.board);
+    return this;
+  }
+
+  public moveRight(): Board {
+    this.board = this.shiftRight(this.board);
     return this;
   }
 
