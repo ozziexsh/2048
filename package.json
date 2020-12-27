@@ -1,10 +1,14 @@
 {
-  "name": "2048",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "2048-cli",
+  "version": "0.1.0",
+  "description": "Play 2048 in your terminal",
+  "main": "dist/index.js",
+  "bin": {
+    "2048-cli": "dist/index.js"
+  },
   "scripts": {
-    "build": "tsc --p . && node ./dist/index.js",
+    "start": "npm run build && node ./dist/index.js",
+    "build": "tsc --p .",
     "test": "jest",
     "test:watch": "jest --watch"
   },

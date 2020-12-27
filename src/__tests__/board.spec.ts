@@ -1,25 +1,16 @@
-import { Board, BoardType } from '../board';
+import Board from '../board';
 
 const EMPTY = Board.EMPTY_SPACE;
-
-function makeEmptyBoard(): BoardType {
-  return [
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY],
-  ];
-}
 
 describe('2048', () => {
   describe('Moving the board right', () => {
     it('should do nothing with empty rows', () => {
-      const board = new Board(makeEmptyBoard());
+      const board = new Board(Board.getEmptyBoard());
       board.moveRight();
-      expect(board.getBoard()).toEqual(makeEmptyBoard());
+      expect(board.getBoard()).toEqual(Board.getEmptyBoard());
     });
     it('should move single number rows over to the edge', () => {
-      const map = makeEmptyBoard();
+      const map = Board.getEmptyBoard();
       map[0][2] = 2;
       map[2][1] = 2;
       const board = new Board(map);
@@ -83,9 +74,9 @@ describe('2048', () => {
 
   describe('Moving the board left', () => {
     it('should do nothing with empty rows', () => {
-      const board = new Board(makeEmptyBoard());
+      const board = new Board(Board.getEmptyBoard());
       board.moveLeft();
-      expect(board.getBoard()).toEqual(makeEmptyBoard());
+      expect(board.getBoard()).toEqual(Board.getEmptyBoard());
     });
     it('should move single number rows over to the edge', () => {
       const board = new Board([
@@ -154,9 +145,9 @@ describe('2048', () => {
 
   describe('Moving the board up', () => {
     it('should do nothing with empty rows', () => {
-      const board = new Board(makeEmptyBoard());
+      const board = new Board(Board.getEmptyBoard());
       board.moveUp();
-      expect(board.getBoard()).toEqual(makeEmptyBoard());
+      expect(board.getBoard()).toEqual(Board.getEmptyBoard());
     });
     it('should move single number rows over to the edge', () => {
       const board = new Board([
@@ -225,9 +216,9 @@ describe('2048', () => {
 
   describe('Moving the board down', () => {
     it('should do nothing with empty rows', () => {
-      const board = new Board(makeEmptyBoard());
+      const board = new Board(Board.getEmptyBoard());
       board.moveDown();
-      expect(board.getBoard()).toEqual(makeEmptyBoard());
+      expect(board.getBoard()).toEqual(Board.getEmptyBoard());
     });
     it('should move single number rows over to the edge', () => {
       const board = new Board([
@@ -291,6 +282,45 @@ describe('2048', () => {
         [EMPTY, 2, EMPTY, 2],
         [EMPTY, 4, EMPTY, 4],
       ]);
+    });
+  });
+
+  describe('canMove', () => {
+    it('should return true, many empty spaces', () => {
+      const board = new Board([
+        [EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, 4, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, 4],
+      ]);
+      expect(board.canMove()).toBeTruthy();
+    });
+    it('should return true, all spaces full but similar number is to the left or right', () => {
+      const board = new Board([
+        [2, 4, 8, 16],
+        [4, 2, 4, 2],
+        [32, 32, 2, 4], // 32s are same
+        [2, 4, 8, 16],
+      ]);
+      expect(board.canMove()).toBeTruthy();
+    });
+    it('should return true, all spaces full but similar number is above or below', () => {
+      const board = new Board([
+        [2, 4, 8, 16],
+        [4, 32, 4, 2], // 32s are the same
+        [8, 32, 2, 4],
+        [2, 4, 8, 16],
+      ]);
+      expect(board.canMove()).toBeTruthy();
+    });
+    it('should return false, no similar numbers or empty spaces', () => {
+      const board = new Board([
+        [2, 4, 8, 16],
+        [4, 16, 4, 2], // 32s are the same
+        [8, 32, 2, 4],
+        [2, 4, 8, 16],
+      ]);
+      expect(board.canMove()).toBeFalsy();
     });
   });
 });

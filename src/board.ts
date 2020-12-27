@@ -2,13 +2,40 @@ import { rotateLeft, rotateRight } from './util';
 
 export type BoardType = Array<Array<number | null>>;
 
-export class Board {
+// inclusive
+function randomInteger(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export default class Board {
   private board: BoardType;
 
   public static EMPTY_SPACE = null;
 
-  constructor(initialBoard: BoardType) {
-    this.board = initialBoard;
+  public static getEmptyBoard(): BoardType {
+    const { EMPTY_SPACE: EMPTY } = Board;
+    return [
+      [EMPTY, EMPTY, EMPTY, EMPTY],
+      [EMPTY, EMPTY, EMPTY, EMPTY],
+      [EMPTY, EMPTY, EMPTY, EMPTY],
+      [EMPTY, EMPTY, EMPTY, EMPTY],
+    ];
+  }
+
+  public static getInitialBoard(): BoardType {
+    // todo ensure coords dont overlap
+    const x1 = randomInteger(0, 3);
+    const y1 = randomInteger(0, 3);
+    const x2 = randomInteger(0, 3);
+    const y2 = randomInteger(0, 3);
+    const board = Board.getEmptyBoard();
+    board[y1][x1] = Math.random() > 0.75 ? 4 : 2;
+    board[y2][x2] = Math.random() > 0.75 ? 4 : 2;
+    return board;
+  }
+
+  constructor(initialBoard?: BoardType) {
+    this.board = initialBoard ?? Board.getEmptyBoard();
   }
 
   public moveUp(): Board {
@@ -35,6 +62,37 @@ export class Board {
   public moveRight(): Board {
     this.board = this.shiftRight(this.board);
     return this;
+  }
+
+  public canMove(): boolean {
+    // check if any spaces null
+    for (let y = 0; y < this.board.length; y++) {
+      const row = this.board[y];
+      for (let x = 0; x < row.length; x++) {
+        if (row[x] === Board.EMPTY_SPACE) {
+          return true;
+        }
+      }
+    }
+
+    // check if any direction has same number
+    for (let y = 0; y < this.board.length; y++) {
+      const row = this.board[y];
+      for (let x = 0; x < row.length; x++) {
+        const cell = row[x];
+        const surroundingCells = [
+          row?.[x + 1], // right
+          row?.[x - 1], // left
+          this.board?.[y - 1]?.[x], // above
+          this.board?.[y + 1]?.[x], // below
+        ];
+        if (surroundingCells.includes(cell)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   public getBoard(): BoardType {

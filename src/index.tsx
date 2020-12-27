@@ -1,69 +1,86 @@
 import React, { useState } from 'react';
-import { render, Text, Box, useInput } from 'ink';
-import { Board } from './board';
+import { render, Text, Box, useInput, Static } from 'ink';
+import Board from './board';
+import Game from './game';
 
-const board = new Board([
-  [Board.EMPTY_SPACE, Board.EMPTY_SPACE, Board.EMPTY_SPACE, Board.EMPTY_SPACE],
-  [Board.EMPTY_SPACE, 2, Board.EMPTY_SPACE, Board.EMPTY_SPACE],
-  [Board.EMPTY_SPACE, Board.EMPTY_SPACE, 2, Board.EMPTY_SPACE],
-  [Board.EMPTY_SPACE, Board.EMPTY_SPACE, Board.EMPTY_SPACE, Board.EMPTY_SPACE],
-]);
+const game = new Game();
+game.reset();
 
 const COLOR_MAP: {
   [value: number]: string;
 } = {
   2: 'cyan',
-  4: 'green',
-  8: 'yellow',
-  16: 'red',
+  4: 'cyanBright',
+  8: 'green',
+  16: 'greenBright',
   32: 'magenta',
+  64: 'magentaBright',
+  128: 'yellow',
+  256: 'yellowBright',
+  512: 'blue',
+  1024: 'blueBright',
+  2048: 'red',
+  4096: 'redBright',
 };
 
 function App() {
-  const [map, setMap] = useState(board.getBoard());
+  const [map, setMap] = useState(game.board.getBoard());
 
-  useInput((_input, key) => {
+  useInput((input, key) => {
+    if (input === 'q') {
+      return process.exit(0);
+    }
     if (key.leftArrow) {
-      board.moveLeft();
+      game.moveLeft();
+    } else if (key.rightArrow) {
+      game.moveRight();
+    } else if (key.upArrow) {
+      game.moveUp();
+    } else if (key.downArrow) {
+      game.moveDown();
     }
-    if (key.rightArrow) {
-      board.moveRight();
+    if (game.isGameOver()) {
+      return process.exit(0);
     }
-    if (key.upArrow) {
-      board.moveUp();
-    }
-    if (key.downArrow) {
-      board.moveDown();
-    }
-    board.spawnNumber();
-    setMap(board.getBoard());
+    setMap(game.board.getBoard());
   });
 
   return (
-    <Box flexDirection={'column'} alignItems={'stretch'}>
-      {map.map((row, y) => (
-        <Box key={y} flexDirection={'row'} alignItems={'stretch'}>
-          {row.map((col, x) => (
-            <Box
-              key={x}
-              width={12}
-              height={6}
-              borderColor={'white'}
-              borderStyle={'classic'}
-              display={'flex'}
-              justifyContent={'center'}
-              alignItems={'center'}
-            >
-              {(() => {
-                if (col === Board.EMPTY_SPACE) {
-                  return <Text>-</Text>;
-                }
-                return <Text color={COLOR_MAP[col] ?? 'white'}>{col}</Text>;
-              })()}
-            </Box>
-          ))}
-        </Box>
-      ))}
+    <Box>
+      <Static
+        items={[
+          'Instructions:',
+          'Press Q to Quit',
+          'Use arrow keys to move board',
+        ]}
+      >
+        {item => <Text key={item}>{item}</Text>}
+      </Static>
+      <Box marginTop={2} flexDirection={'column'} alignItems={'stretch'}>
+        {map.map((row, y) => (
+          <Box key={y} flexDirection={'row'} alignItems={'stretch'}>
+            {row.map((col, x) => (
+              <Box
+                key={x}
+                width={12}
+                height={6}
+                borderColor={'white'}
+                borderStyle={'classic'}
+                display={'flex'}
+                justifyContent={'center'}
+                alignItems={'center'}
+              >
+                {(() => {
+                  if (col === Board.EMPTY_SPACE) {
+                    return <Text>-</Text>;
+                  }
+                  return <Text color={COLOR_MAP[col] ?? 'white'}>{col}</Text>;
+                })()}
+              </Box>
+            ))}
+          </Box>
+        ))}
+      </Box>
     </Box>
   );
 }
