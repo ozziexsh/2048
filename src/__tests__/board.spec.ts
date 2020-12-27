@@ -1,4 +1,4 @@
-import { Board, BoardType } from '../index';
+import { Board, BoardType } from '../board';
 
 const EMPTY = Board.EMPTY_SPACE;
 
@@ -290,40 +290,6 @@ describe('2048', () => {
         [EMPTY, 4, EMPTY, EMPTY],
         [EMPTY, 2, EMPTY, 2],
         [EMPTY, 4, EMPTY, 4],
-      ]);
-    });
-  });
-
-  describe('rotate 2d array left', () => {
-    it('Should rotate a 2d array left', () => {
-      const board = new Board([
-        [1, 2, 3, 4],
-        [1, 2, 3, 4],
-        [1, 2, 3, 4],
-        [1, 2, 3, 4],
-      ]);
-      expect(board.rotateLeft(board.getBoard())).toEqual([
-        [4, 4, 4, 4],
-        [3, 3, 3, 3],
-        [2, 2, 2, 2],
-        [1, 1, 1, 1],
-      ]);
-    });
-  });
-
-  describe('rotate 2d array right', () => {
-    it('Should rotate a 2d array right', () => {
-      const board = new Board([
-        [1, 2, 3, 4],
-        [1, 2, 3, 4],
-        [1, 2, 3, 4],
-        [1, 2, 3, 4],
-      ]);
-      expect(board.rotateRight(board.getBoard())).toEqual([
-        [1, 1, 1, 1],
-        [2, 2, 2, 2],
-        [3, 3, 3, 3],
-        [4, 4, 4, 4],
       ]);
     });
   });
