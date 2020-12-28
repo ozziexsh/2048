@@ -1,6 +1,6 @@
 {
   "name": "2048-cli",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Play 2048 in your terminal",
   "main": "dist/cli.js",
   "bin": {
@@ -11,7 +11,7 @@
     "build": "tsc --p .",
     "test": "jest",
     "test:watch": "jest --watch",
-    "prepublishOnly": "chmod +x ./dist/cli.js"
+    "prepublishOnly": "npm run build && chmod +x ./dist/cli.js"
   },
   "prettier": {
     "semi": true,
